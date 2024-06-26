@@ -721,14 +721,14 @@ cmap = mpl.colormaps['turbo']
 if Analisis_de_Fourier==1:
     fig = plt.figure(figsize=(9,7),constrained_layout=True)
     ax = fig.add_subplot(1,1,1)
-    for i in range(0,len(fnames_m)):
+    for i in range(len(fnames_m)):
             color = cmap(norm(temp_m[i]))
             plt.plot(Ciclos_eje_H[i]/1000,Ciclos_eje_M_filt[i],'-',color=color,label=f'{fnames_m[i].split("_")[-1][-7:-4]}  {temp_m[i]} °C')
 
 
     plt.plot(Ciclo_descancelacion_H/1000,Ciclo_descancelacion_M_filt,'-',color='k',label='Descancelación')
     #plt.plot(H_prom/1000,M_prom,'.-',label=f'Ciclo promedio ({Num_ciclos_m} ciclos)')
-plt.legend(loc='lower right',fancybox=True)
+#plt.legend(loc='lower right',fancybox=True)
 
 # Configurar la barra de colores
 sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
@@ -818,93 +818,93 @@ delimiter='\t',formats=formato)
 
 #%% dphi | tau | SAR
 
-# Definir el mapa de colores (jet en este caso)
-cmap = mpl.colormaps['jet'] #'viridis'
-# Normalizar las temperaturas al rango [0, 1] para obtener colores
-normalized_temperaturas = (np.array(temp_m) - np.array(temp_m).min()) / (np.array(temp_m).max() - np.array(temp_m).min())
-# Obtener los colores correspondientes a las temperaturas normalizadas
-colors = cmap(normalized_temperaturas)
+# # Definir el mapa de colores (jet en este caso)
+# cmap = mpl.colormaps['jet'] #'viridis'
+# # Normalizar las temperaturas al rango [0, 1] para obtener colores
+# normalized_temperaturas = (np.array(temp_m) - np.array(temp_m).min()) / (np.array(temp_m).max() - np.array(temp_m).min())
+# # Obtener los colores correspondientes a las temperaturas normalizadas
+# colors = cmap(normalized_temperaturas)
 
-fig, axs = plt.subplots(3, 1, figsize=(9,7), constrained_layout=True,sharex=True)
-axs[0].scatter(temp_m, Defasaje_1er_arm,  c=colors,marker='o', label='$\Delta\phi_0$')
-axs[0].plot(temp_m, Defasaje_1er_arm,zorder=-1)
-axs[0].legend()
-axs[0].grid()
-axs[0].set_ylabel('$\Delta\phi_0$')
+# fig, axs = plt.subplots(3, 1, figsize=(9,7), constrained_layout=True,sharex=True)
+# axs[0].scatter(temp_m, Defasaje_1er_arm,  c=colors,marker='o', label='$\Delta\phi_0$')
+# axs[0].plot(temp_m, Defasaje_1er_arm,zorder=-1)
+# axs[0].legend()
+# axs[0].grid()
+# axs[0].set_ylabel('$\Delta\phi_0$')
 
-axs[1].scatter(temp_m, Tau,c=colors, marker='s', label=r'$\tau$')
-axs[1].plot(temp_m, Tau,zorder=-1)
-axs[1].legend()
-axs[1].grid()
-axs[1].set_ylabel(r'$\tau$ (s)')
+# axs[1].scatter(temp_m, Tau,c=colors, marker='s', label=r'$\tau$')
+# axs[1].plot(temp_m, Tau,zorder=-1)
+# axs[1].legend()
+# axs[1].grid()
+# axs[1].set_ylabel(r'$\tau$ (s)')
 
-axs[2].scatter(temp_m, SAR,c=colors,marker= 'v', label=f'{concentracion/1000:.2f} g/L')
-axs[2].plot(temp_m, SAR,zorder=-1)
-axs[2].legend()
-axs[2].grid()
-axs[2].set_xlabel('T (°C)')
-axs[2].set_ylabel('SAR (W/g)')
+# axs[2].scatter(temp_m, SAR,c=colors,marker= 'v', label=f'{concentracion/1000:.2f} g/L')
+# axs[2].plot(temp_m, SAR,zorder=-1)
+# axs[2].legend()
+# axs[2].grid()
+# axs[2].set_xlabel('T (°C)')
+# axs[2].set_ylabel('SAR (W/g)')
 
-plt.suptitle(r'Defasaje - $\tau$ - SAR'+f'\n{nombre.strip("*")} - {frec_nombre[0]/1000:>3.0f} kHz - {round(np.mean(Campo_maximo)/1e3):>4.1f} kA/m')
-plt.savefig(os.path.join(output_dir,os.path.commonprefix(list(fnames_m))+'_dphi_tau_SAR_vs_T.png'),dpi=200,facecolor='w')
+# plt.suptitle(r'Defasaje - $\tau$ - SAR'+f'\n{nombre.strip("*")} - {frec_nombre[0]/1000:>3.0f} kHz - {round(np.mean(Campo_maximo)/1e3):>4.1f} kA/m')
+# plt.savefig(os.path.join(output_dir,os.path.commonprefix(list(fnames_m))+'_dphi_tau_SAR_vs_T.png'),dpi=200,facecolor='w')
 
-#%% Hc | Mr | xi
+# #%% Hc | Mr | xi
 
-fig, axs = plt.subplots(3, 1, figsize=(9,7), constrained_layout=True,sharex=True)
-axs[0].scatter(temp_m,Coercitividad_kAm,c=colors, marker='o',label='H$_C$')
-axs[0].plot(temp_m,Coercitividad_kAm,zorder=-1)
-axs[0].legend()
-axs[0].grid()
-axs[0].set_ylabel('Campo Coercitivo (kA/m)')
+# fig, axs = plt.subplots(3, 1, figsize=(9,7), constrained_layout=True,sharex=True)
+# axs[0].scatter(temp_m,Coercitividad_kAm,c=colors, marker='o',label='H$_C$')
+# axs[0].plot(temp_m,Coercitividad_kAm,zorder=-1)
+# axs[0].legend()
+# axs[0].grid()
+# axs[0].set_ylabel('Campo Coercitivo (kA/m)')
 
-axs[1].scatter(temp_m, xi_M_0,c=colors, marker='s',label='$\chi$ a M=0')
-axs[1].plot(temp_m, xi_M_0,zorder=-1)
-axs[1].legend()
-axs[1].grid()
-axs[1].set_ylabel('Susceptibilidad a M=0')
+# axs[1].scatter(temp_m, xi_M_0,c=colors, marker='s',label='$\chi$ a M=0')
+# axs[1].plot(temp_m, xi_M_0,zorder=-1)
+# axs[1].legend()
+# axs[1].grid()
+# axs[1].set_ylabel('Susceptibilidad a M=0')
 
-axs[2].scatter(temp_m, Remanencia_Am,c=colors, marker='D',label='M$_R$')
-axs[2].plot(temp_m, Remanencia_Am,zorder=-1)
-axs[2].legend()
-axs[2].grid()
-axs[2].set_ylabel('Magnetizacion Remanente')
-axs[2].set_xlabel('T (°C)')
-plt.suptitle('Campo Coercitivo, Magnetizacion Remanente'+f'\n{nombre.strip("*")} - {frec_nombre[0]/1000:>3.0f} kHz - {round(np.mean(Campo_maximo)/1e3):>4.1f} kA/m')
-plt.savefig(os.path.join(output_dir,os.path.commonprefix(list(fnames_m))+'_Hc_Mr_xi_vs_T.png'),dpi=300,facecolor='w')
+# axs[2].scatter(temp_m, Remanencia_Am,c=colors, marker='D',label='M$_R$')
+# axs[2].plot(temp_m, Remanencia_Am,zorder=-1)
+# axs[2].legend()
+# axs[2].grid()
+# axs[2].set_ylabel('Magnetizacion Remanente')
+# axs[2].set_xlabel('T (°C)')
+# plt.suptitle('Campo Coercitivo, Magnetizacion Remanente'+f'\n{nombre.strip("*")} - {frec_nombre[0]/1000:>3.0f} kHz - {round(np.mean(Campo_maximo)/1e3):>4.1f} kA/m')
+# plt.savefig(os.path.join(output_dir,os.path.commonprefix(list(fnames_m))+'_Hc_Mr_xi_vs_T.png'),dpi=300,facecolor='w')
 
-#%%
-
-
-# print(f'''tau = {tau_all} s
-# SAR = {SAR_all:.0f} W/g
-# dphi = {defasaje_all} rad
-
-# Coercitivo = {Coercitividad_all:.2f} kA/m
-# Remanencia = {Remanencia_all:.0f} A/m
-# Susceptibilidad a M=0 = {xi_all:.e}
-#       ''')
-# #%% Cociente magnitudes del 1er y2do armonico
-
-# fig, axs = plt.subplots(1, 1, figsize=(6,4), constrained_layout=True,sharex=True)
-# # Gráfico 1
-# axs.scatter(temp_m,cociente_f1_f0, marker='o',c=colors)
-# axs.plot(temp_m,cociente_f1_f0,label='mag$_1$/mag$_0$',zorder=-1)
-# axs.axhline(1,0,1,ls='-.',c='k',zorder=0)
-# axs.grid()
-# axs.scatter(temp_m, cociente_f2_f0, marker='s',c=colors)
-# axs.plot(temp_m,cociente_f2_f0, label='mag$_2$/mag$_0$',zorder=-1)
-# axs.legend()
-# plt.title('Cociente de magnitudes de armonicos')
-# plt.savefig(os.path.commonprefix(fnames_m)+'_cociente_magnitudes.png',dpi=200,facecolor='w')
+# #%%
 
 
-#%%%
-end_time = time.time()
+# # print(f'''tau = {tau_all} s
+# # SAR = {SAR_all:.0f} W/g
+# # dphi = {defasaje_all} rad
 
-print(f'Tiempo de ejecución del script: {(end_time-start_time):6.3f} s.')
+# # Coercitivo = {Coercitividad_all:.2f} kA/m
+# # Remanencia = {Remanencia_all:.0f} A/m
+# # Susceptibilidad a M=0 = {xi_all:.e}
+# #       ''')
+# # #%% Cociente magnitudes del 1er y2do armonico
+
+# # fig, axs = plt.subplots(1, 1, figsize=(6,4), constrained_layout=True,sharex=True)
+# # # Gráfico 1
+# # axs.scatter(temp_m,cociente_f1_f0, marker='o',c=colors)
+# # axs.plot(temp_m,cociente_f1_f0,label='mag$_1$/mag$_0$',zorder=-1)
+# # axs.axhline(1,0,1,ls='-.',c='k',zorder=0)
+# # axs.grid()
+# # axs.scatter(temp_m, cociente_f2_f0, marker='s',c=colors)
+# # axs.plot(temp_m,cociente_f2_f0, label='mag$_2$/mag$_0$',zorder=-1)
+# # axs.legend()
+# # plt.title('Cociente de magnitudes de armonicos')
+# # plt.savefig(os.path.commonprefix(fnames_m)+'_cociente_magnitudes.png',dpi=200,facecolor='w')
 
 
-#%% resto fondo01 al ultimo ciclo y comparo
+# #%%%
+# end_time = time.time()
+
+# print(f'Tiempo de ejecución del script: {(end_time-start_time):6.3f} s.')
+
+
+# #%% resto fondo01 al ultimo ciclo y comparo
 
 # h_fdo= Ciclo_descancelacion_H[:].copy()/1000
 # m_fdo= Ciclo_descancelacion_M_filt[:].copy()
@@ -939,3 +939,63 @@ print(f'Tiempo de ejecución del script: {(end_time-start_time):6.3f} s.')
 # plt.xlabel('H (kA/m)',fontsize=15)
 # plt.ylabel('M (A/m)',fontsize=15)
 # plt.savefig(os.path.join(output_dir,os.path.commonprefix(list(fnames_m))+'_ciclos_s_descancelacion.png'),dpi=300,facecolor='w')
+#%% Ajuste lineales 
+def lineal(x,m,n):
+    return m*x+n
+
+h_d=Ciclo_descancelacion_H.copy()/1000
+m_d=Ciclo_descancelacion_M_filt.copy()
+
+h_i=Ciclos_eje_H[0].copy()/1000
+m_i=Ciclos_eje_M_filt[0]
+
+h_f=Ciclos_eje_H[-1].copy()/1000
+m_f=Ciclos_eje_M_filt[-1]
+
+(pend_desc,ord_desc),_= curve_fit(lineal,h_d,m_d)
+x_aux_desc=np.linspace(min(h_d),max(h_d))
+y_aux_desc=lineal(x_aux_desc,pend_desc,ord_desc)
+
+(pend_i,ord_i),_= curve_fit(lineal,h_i,m_i)
+x_aux_i=np.linspace(min(h_i),max(h_i))
+y_aux_i=lineal(x_aux_i,pend_i,ord_i)
+
+(pend_f,ord_f),_= curve_fit(lineal,h_f,m_f)
+x_aux_f=np.linspace(min(h_f),max(h_f))
+y_aux_f=lineal(x_aux_f,pend_f,ord_f)
+
+fig,ax=plt.subplots(constrained_layout=True)
+ax.plot(h_d,m_d,'k',label='descanc')
+ax.plot(x_aux_desc, y_aux_desc,label=f'm$_d$={pend_desc:.1f}')
+
+ax.plot(h_i,m_i)
+ax.plot(x_aux_i, y_aux_i,label=f'm$_i$={pend_i:.1f}')
+
+
+ax.plot(h_f,m_f)
+ax.plot(x_aux_f, y_aux_f,label=f'm$_f$={pend_f:.1f}')
+plt.xlabel('H (kA/m)')
+plt.ylabel('M (A/m)')
+plt.legend()
+plt.title('Pendientes del paramagneto')
+plt.grid()
+plt.savefig(os.path.join(output_dir,'pendientes_d_i_f.png'))
+#%% resto la pen
+pendientes=[]
+for i in range(len(fnames_m)):
+    (pend,ord),_=curve_fit(lineal,Ciclos_eje_H[i]/1000,Ciclos_eje_M_filt[i])
+    pendientes.append(pend)
+    
+fig,ax=plt.subplots(figsize=(9,4),constrained_layout=True)
+ax.plot(temp_m,pendientes,'.-')
+ax.plot(temp_m[0],pend_i,'o',label=f'm$_i$={pend_i:.1f}')
+ax.plot(temp_m[-1],pend_f,'o',label=f'm$_f$={pend_f:.1f}')
+ax.axhline(pend_desc,0,1,linestyle='-.',label=f'm$_d$={pend_desc:.1f}')
+
+plt.legend()
+
+plt.title('pendientes vs temperatura')
+plt.grid()
+plt.savefig(os.path.join(output_dir,'pendientes_vs_T.png'))
+
+# %%
