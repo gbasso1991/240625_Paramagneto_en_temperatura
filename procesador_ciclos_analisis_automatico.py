@@ -49,10 +49,10 @@ todos=1
 un_solo_fondo=1
 resto_fondo=1
 templog = 1
-nombre='*NEd'
+nombre='*Dy2O3'
 Analisis_de_Fourier = 1 # sobre las señales, imprime espectro de señal muestra
-N_armonicos_impares = 20
-concentracion =11.7*1e3 #[concentracion]= g/m^3 (1 g/l == 1e3 g/m^3) (Default = 10000 g/m^3)
+N_armonicos_impares = 10
+concentracion =10.0*1e3 #[concentracion]= g/m^3 (1 g/l == 1e3 g/m^3) (Default = 10000 g/m^3)
 capsula_glucosa=0   # capsula para solventes organicos
 detector_ciclos_descartables=True #en funcion a Mag max para evitar guardar/promediar con ciclos in/out
 Ciclo_promedio=1
@@ -816,37 +816,56 @@ ascii.write(resultados_out,output_file2,names=encabezado,overwrite=True,
 delimiter='\t',formats=formato)
 
 
-#%% dphi | tau | SAR
+#%% tau & SAR vs Tempertaura
+# Definir el mapa de colores (jet en este caso)
+cmap = mpl.colormaps['jet'] #'viridis'
+# Normalizar las temperaturas al rango [0, 1] para obtener colores
+normalized_temperaturas = (np.array(temp_m) - np.array(temp_m).min()) / (np.array(temp_m).max() - np.array(temp_m).min())
+# Obtener los colores correspondientes a las temperaturas normalizadas
+colors = cmap(normalized_temperaturas)
+Tau= np.array(Tau)*1e9
 
-# # Definir el mapa de colores (jet en este caso)
-# cmap = mpl.colormaps['jet'] #'viridis'
-# # Normalizar las temperaturas al rango [0, 1] para obtener colores
-# normalized_temperaturas = (np.array(temp_m) - np.array(temp_m).min()) / (np.array(temp_m).max() - np.array(temp_m).min())
-# # Obtener los colores correspondientes a las temperaturas normalizadas
-# colors = cmap(normalized_temperaturas)
+fig, ax = plt.subplots(2, 1, figsize=(10,5), constrained_layout=True,sharex=True)
+ax[0].scatter(temp_m, Tau,c=colors, marker='o', label=r'$\tau$')
+ax[0].plot(temp_m, Tau,zorder=-1)
+ax[0].set_ylabel(r'$\tau$ (ns)')
 
-# fig, axs = plt.subplots(3, 1, figsize=(9,7), constrained_layout=True,sharex=True)
-# axs[0].scatter(temp_m, Defasaje_1er_arm,  c=colors,marker='o', label='$\Delta\phi_0$')
-# axs[0].plot(temp_m, Defasaje_1er_arm,zorder=-1)
-# axs[0].legend()
-# axs[0].grid()
-# axs[0].set_ylabel('$\Delta\phi_0$')
+ax[1].scatter(temp_m, SAR,c=colors,marker= 'o', label=f'{concentracion/1000:.2f} g/L')
+ax[1].plot(temp_m, SAR,zorder=-1)
+ax[1].set_xlabel('T (°C)')
+ax[1].set_ylabel('SAR (W/g)')
 
-# axs[1].scatter(temp_m, Tau,c=colors, marker='s', label=r'$\tau$')
-# axs[1].plot(temp_m, Tau,zorder=-1)
-# axs[1].legend()
-# axs[1].grid()
-# axs[1].set_ylabel(r'$\tau$ (s)')
+for a in ax:
+    a.grid()
+    a.legend()
+plt.suptitle(r'Defasaje - $\tau$ - SAR'+f'\n{nombre.strip("*")} - {frec_nombre[0]/1000:>3.0f} kHz - {round(np.mean(Campo_maximo)/1e3):>4.1f} kA/m')
+plt.savefig(os.path.join(output_dir,os.path.commonprefix(list(fnames_m))+'_dphi_tau_SAR_vs_T.png'),dpi=300,facecolor='w')
+#%%
+#armo vector de tiempos  en segundos
 
-# axs[2].scatter(temp_m, SAR,c=colors,marker= 'v', label=f'{concentracion/1000:.2f} g/L')
-# axs[2].plot(temp_m, SAR,zorder=-1)
-# axs[2].legend()
-# axs[2].grid()
-# axs[2].set_xlabel('T (°C)')
-# axs[2].set_ylabel('SAR (W/g)')
+time_m_new = np.array([(t - time_m[0]).total_seconds() for t in time_m])
 
-# plt.suptitle(r'Defasaje - $\tau$ - SAR'+f'\n{nombre.strip("*")} - {frec_nombre[0]/1000:>3.0f} kHz - {round(np.mean(Campo_maximo)/1e3):>4.1f} kA/m')
-# plt.savefig(os.path.join(output_dir,os.path.commonprefix(list(fnames_m))+'_dphi_tau_SAR_vs_T.png'),dpi=200,facecolor='w')
+fig, ax = plt.subplots(2, 1, figsize=(10,5), constrained_layout=True,sharex=True)
+ax[0].scatter(time_m_new, Tau,c=colors, marker='o', label=r'$\tau$')
+ax[0].plot(time_m_new, Tau,zorder=-1)
+ax[0].set_ylabel(r'$\tau$ (ns)')
+
+ax[1].scatter(time_m_new, SAR,c=colors,marker= 'o', label=f'{concentracion/1000:.2f} g/L')
+ax[1].plot(time_m_new, SAR,zorder=-1)
+ax[1].set_xlabel('t (s)')
+ax[1].set_ylabel('SAR (W/g)')
+
+for a in ax:
+    a.grid()
+    a.legend()
+plt.suptitle(r'$\tau$ - SAR'+f'\n{nombre.strip("*")} - {frec_nombre[0]/1000:>3.0f} kHz - {round(np.mean(Campo_maximo)/1e3):>4.1f} kA/m')
+plt.savefig(os.path.join(output_dir,os.path.commonprefix(list(fnames_m))+'_tau_SAR_vs_tiempo.png'),dpi=300,facecolor='w')
+
+
+
+
+
+
 
 # #%% Hc | Mr | xi
 
